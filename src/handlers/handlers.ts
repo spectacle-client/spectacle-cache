@@ -5,6 +5,7 @@ import {AutoModRuleCreate, AutoModRuleDelete, AutoModRuleUpdate} from "./AutoMod
 import {ChannelCreate, ChannelDelete, ChannelUpdate} from "./Channel.js";
 import {GuildEmojisUpdate} from "./Emoji.js";
 import {GuildCreate, GuildDelete, GuildUpdate} from "./Guild.js";
+import {GuildMemberAdd, GuildMemberRemove, GuildMembersChunk, GuildMemberUpdate} from "./Member.js";
 import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./Message.js";
 import {GuildStickersUpdate} from "./Sticker.js";
 
@@ -28,6 +29,10 @@ export const handlers: Partial<Record<GatewayEvents, handler | genericHandler>> 
     AUTO_MODERATION_RULE_DELETE: AutoModRuleDelete,
     GUILD_EMOJIS_UPDATE: GuildEmojisUpdate,
     GUILD_STICKERS_UPDATE: GuildStickersUpdate,
+    GUILD_MEMBER_ADD: GuildMemberAdd,
+    GUILD_MEMBER_UPDATE: GuildMemberUpdate,
+    GUILD_MEMBER_REMOVE: GuildMemberRemove,
+    GUILD_MEMBERS_CHUNK: GuildMembersChunk,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
