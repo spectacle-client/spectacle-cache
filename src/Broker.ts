@@ -21,6 +21,10 @@ export class GatewayBroker {
     public constructor(configPath: string) {
         const jsonFile = readFileSync(configPath, "utf8");
         this.config = validateConfig(JSON.parse(jsonFile));
+
+        if (typeof this.config.logging === "boolean" && !this.config.logging) {
+            console.log = () => {};
+        }
     }
 
     public async connectBroker() {

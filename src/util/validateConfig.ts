@@ -18,6 +18,7 @@ export enum CacheNames {
 }
 
 export interface Config {
+    logging: boolean,
     broker: {
         type: "redis" | "amqp",
         urls: string[],
@@ -60,6 +61,8 @@ export function validateConfig(config: any): Config {
         throw new Error("No cache urls provided");
     } else if(config.cache.urls.some((x: any) => typeof x !== "string")) {
         throw new Error("Invalid cache url");
+    } else if(config.logging && !(typeof config.logging === "boolean")) {
+        throw new Error("Invalid logging provided");
     }
 
     if (config.default) {
