@@ -6,6 +6,7 @@ import {ChannelCreate, ChannelDelete, ChannelUpdate} from "./Channel.js";
 import {GuildEmojisUpdate} from "./Emoji.js";
 import {GuildCreate, GuildDelete, GuildUpdate} from "./Guild.js";
 import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./Message.js";
+import {GuildStickersUpdate} from "./Sticker.js";
 
 export type handler = (broker: GatewayBroker, data: any) => Promise<void>;
 export type genericHandler = (entity: CacheNames, keyPath: ([string, string]|[string])[]) => Promise<void>;
@@ -26,6 +27,7 @@ export const handlers: Partial<Record<GatewayEvents, handler | genericHandler>> 
     AUTO_MODERATION_RULE_UPDATE: AutoModRuleUpdate,
     AUTO_MODERATION_RULE_DELETE: AutoModRuleDelete,
     GUILD_EMOJIS_UPDATE: GuildEmojisUpdate,
+    GUILD_STICKERS_UPDATE: GuildStickersUpdate,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
