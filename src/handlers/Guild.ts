@@ -145,6 +145,13 @@ export async function GuildCreateUpdateCascade(broker: GatewayBroker, data: Gate
             const memberKey = `${CacheNames.Member}:${data.id}:${member.user!.id}`;
             await update(broker.cache!, memberKey, member, broker.entityConfigMap.get(CacheNames.Member)!.ttl);
             console.log(`[Cascade] Updated ${memberKey} (ttl: ${broker.entityConfigMap.get(CacheNames.Member)!.ttl})`);
+
+            const userKey = `${CacheNames.User}:${member.user!.id}`;
+            const userTtl = broker.entityConfigMap.get(CacheNames.User)!.ttl;
+
+            await update(broker.cache!, userKey, member.user!, userTtl);
+
+            console.log(`[Cascade] Updated ${userKey} (ttl: ${userTtl})`);
         }
     }
 
@@ -166,7 +173,7 @@ export async function GuildCreateUpdateCascade(broker: GatewayBroker, data: Gate
 
     if ("presences" in data && data.presences) {
         for (const presence of data.presences) {
-            const presenceKey = `${CacheNames.Presence}:${data.id}:${presence.user!.id}`;
+            const presenceKey = `${CacheNames.Presence}:${data.id}:${presence.user.id}`;
             await update(broker.cache!, presenceKey, presence, broker.entityConfigMap.get(CacheNames.Presence)!.ttl);
             console.log(`[Cascade] Updated ${presenceKey} (ttl: ${broker.entityConfigMap.get(CacheNames.Presence)!.ttl})`);
         }
