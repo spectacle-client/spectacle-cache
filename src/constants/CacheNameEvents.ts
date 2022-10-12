@@ -130,5 +130,7 @@ export const CacheNameEvents = new Map<CacheNames, GatewayEvents[]>([
         GatewayDispatchEvents.TypingStart,
         GatewayDispatchEvents.UserUpdate,
         GatewayDispatchEvents.VoiceStateUpdate,
+        GatewayDispatchEvents.IntegrationCreate,
+        GatewayDispatchEvents.IntegrationUpdate,
     ]],
 ]);
