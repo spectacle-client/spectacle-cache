@@ -4,6 +4,7 @@ import {
     GatewayMessageUpdateDispatchData
 } from "discord-api-types/v10";
 import {GatewayBroker} from "../Broker.js";
+import {scanKeys} from "../util/redis/scanKeys.js";
 import {update} from "../util/redis/update.js";
 import {CacheNames} from "../util/validateConfig.js";
 
@@ -45,7 +46,7 @@ export async function MessageDelete(broker: GatewayBroker, data: any) {
     await broker.cache!.del(key);
     console.log(`Deleted ${key}`);
 
-    const reactionKeys = await broker.cache!.keys(`${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.id}:*`);
+    const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.id}:*`);
 
     if (reactionKeys.length > 0) {
         await broker.cache!.del(reactionKeys);
