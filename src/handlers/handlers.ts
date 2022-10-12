@@ -6,6 +6,7 @@ import {GuildEmojisUpdate} from "./Emoji.js";
 import {GuildCreate, GuildDelete, GuildUpdate} from "./Guild.js";
 import {GuildMemberAdd, GuildMemberRemove, GuildMembersChunk, GuildMemberUpdate} from "./Member.js";
 import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./Message.js";
+import {GuildRoleCreate, GuildRoleDelete, GuildRoleUpdate} from "./Role.js";
 import {GuildStickersUpdate} from "./Sticker.js";
 
 export type handler = (broker: GatewayBroker, data: any) => Promise<void>;
@@ -31,6 +32,9 @@ export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defau
     GUILD_MEMBER_UPDATE: GuildMemberUpdate,
     GUILD_MEMBER_REMOVE: GuildMemberRemove,
     GUILD_MEMBERS_CHUNK: GuildMembersChunk,
+    GUILD_ROLE_CREATE: GuildRoleCreate,
+    GUILD_ROLE_UPDATE: GuildRoleUpdate,
+    GUILD_ROLE_DELETE: GuildRoleDelete,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
