@@ -7,7 +7,7 @@ import {GatewayBroker} from "../Broker.js";
 import {update} from "../util/redis/update.js";
 import {CacheNames} from "../util/validateConfig.js";
 
-const entity: CacheNames = CacheNames.Message;
+const entity = CacheNames.Message;
 
 export async function MessageCreate(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayMessageCreateDispatchData;

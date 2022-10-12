@@ -8,7 +8,7 @@ import {scanKeys} from "../util/redis/scanKeys.js";
 import {update} from "../util/redis/update.js";
 import {CacheNames} from "../util/validateConfig.js";
 
-const entity: CacheNames = CacheNames.Channel;
+const entity = CacheNames.Channel;
 
 export async function ChannelCreate(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayChannelCreateDispatchData & {guild_id?: string};

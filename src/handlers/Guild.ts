@@ -3,7 +3,7 @@ import {GatewayBroker} from "../Broker.js";
 import {update} from "../util/redis/update.js";
 import {CacheNames} from "../util/validateConfig.js";
 
-const entity: CacheNames = CacheNames.Guild;
+const entity = CacheNames.Guild;
 
 export async function GuildCreate(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayGuildCreateDispatchData;
