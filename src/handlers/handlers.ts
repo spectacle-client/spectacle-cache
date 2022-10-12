@@ -13,6 +13,7 @@ import {MessageReactionAdd, MessageReactionRemove, MessageReactionRemoveAll, Mes
 import {GuildRoleCreate, GuildRoleDelete, GuildRoleUpdate} from "./Role.js";
 import {StageInstanceCreate, StageInstanceDelete, StageInstanceUpdate} from "./Stage.js";
 import {GuildStickersUpdate} from "./Sticker.js";
+import {VoiceStateUpdate} from "./VoiceState.js";
 
 export type handler = (broker: GatewayBroker, data: any) => Promise<void>;
 export type defaultHandler = (broker: GatewayBroker, event: string, data: any) => Promise<void>;
@@ -55,6 +56,7 @@ export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defau
     STAGE_INSTANCE_CREATE: StageInstanceCreate,
     STAGE_INSTANCE_UPDATE: StageInstanceUpdate,
     STAGE_INSTANCE_DELETE: StageInstanceDelete,
+    VOICE_SERVER_UPDATE: VoiceStateUpdate,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
