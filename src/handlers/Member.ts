@@ -3,7 +3,7 @@ import {
     GatewayGuildMemberRemoveDispatchData, GatewayGuildMembersChunkDispatchData,
     GatewayGuildMemberUpdateDispatchData
 } from "discord-api-types/v10";
-import { CacheNames } from "util/validateConfig";
+import {CacheNames} from "../util/validateConfig.js";
 import {GatewayBroker} from "../Broker.js";
 import {update} from "../util/redis/update.js";
 
