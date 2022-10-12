@@ -9,6 +9,12 @@ import {IntegrationCreate, IntegrationDelete, IntegrationUpdate} from "./Integra
 import {InviteCreate, InviteDelete} from "./Invite.js";
 import {GuildMemberAdd, GuildMemberRemove, GuildMembersChunk, GuildMemberUpdate} from "./Member.js";
 import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./Message.js";
+import {
+    MessageReactionAdd,
+    MessageReactionRemove,
+    MessageReactionRemoveAll,
+    MessageReactionRemoveEmoji
+} from "./Reaction.js";
 import {GuildRoleCreate, GuildRoleDelete, GuildRoleUpdate} from "./Role.js";
 import {GuildStickersUpdate} from "./Sticker.js";
 
@@ -46,6 +52,10 @@ export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defau
     INTEGRATION_DELETE: IntegrationDelete,
     INVITE_CREATE: InviteCreate,
     INVITE_DELETE: InviteDelete,
+    MESSAGE_REACTION_ADD: MessageReactionAdd,
+    MESSAGE_REACTION_REMOVE: MessageReactionRemove,
+    MESSAGE_REACTION_REMOVE_EMOJI: MessageReactionRemoveEmoji,
+    MESSAGE_REACTION_REMOVE_ALL: MessageReactionRemoveAll,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
