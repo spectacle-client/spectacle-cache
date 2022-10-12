@@ -20,6 +20,13 @@ export async function GuildMemberAdd(broker: GatewayBroker, data: any) {
     console.log(`Cached ${key} (ttl: ${ttl})`);
 
     await GuildMemberAddUpdateCascade(broker, data);
+
+    const userKey = `${CacheNames.User}:${parsed.user!.id}`;
+    const userTtl = broker.entityConfigMap.get(CacheNames.User)!.ttl;
+
+    await update(broker.cache!, userKey, parsed.user, userTtl);
+
+    console.log(`Updated ${userKey} (ttl: ${userTtl})`);
 }
 
 export async function GuildMemberUpdate(broker: GatewayBroker, data: any) {
@@ -32,6 +39,13 @@ export async function GuildMemberUpdate(broker: GatewayBroker, data: any) {
     console.log(`Updated ${key} (ttl: ${ttl})`);
 
     await GuildMemberAddUpdateCascade(broker, data);
+
+    const userKey = `${CacheNames.User}:${parsed.user!.id}`;
+    const userTtl = broker.entityConfigMap.get(CacheNames.User)!.ttl;
+
+    await update(broker.cache!, userKey, parsed.user, userTtl);
+
+    console.log(`Updated ${userKey} (ttl: ${userTtl})`);
 }
 
 export async function GuildMemberRemove(broker: GatewayBroker, data: any) {
@@ -53,6 +67,13 @@ export async function GuildMembersChunk(broker: GatewayBroker, data: any) {
         else await broker.cache!.set(key, JSON.stringify(member));
 
         console.log(`Cached ${key} (ttl: ${ttl})`);
+
+        const userKey = `${CacheNames.User}:${member.user!.id}`;
+        const userTtl = broker.entityConfigMap.get(CacheNames.User)!.ttl;
+
+        await update(broker.cache!, userKey, member.user, userTtl);
+
+        console.log(`Updated ${userKey} (ttl: ${userTtl})`);
     }
 
     if ("presences" in parsed) {
