@@ -119,7 +119,5 @@ export function validateConfig(config: any): Config {
         }
     }
 
-    console.log(`Using defaults:\n${JSON.stringify(config.default, null, 4)}`);
-
     return config as Config;
 }
