@@ -65,7 +65,7 @@ export async function ChannelCreateUpdateCascade(broker: GatewayBroker, data: Ga
         for (const recipient of data.recipients) {
             const userKey = `${CacheNames.User}:${recipient.id}`;
             await update(broker.cache!, userKey, recipient, broker.entityConfigMap.get(CacheNames.User)!.ttl);
-            console.log(`[Cascade] Cached ${CacheNames.User}:${recipient.id}`);
+            console.log(`[Cascade] Cached ${CacheNames.User}:${recipient.id} (ttl: ${broker.entityConfigMap.get(CacheNames.User)!.ttl})`);
         }
     }
 }
