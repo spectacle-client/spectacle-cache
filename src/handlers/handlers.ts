@@ -3,6 +3,7 @@ import {GatewayEvents} from "../constants/CacheNameEvents.js";
 import {AutoModRuleCreate, AutoModRuleDelete, AutoModRuleUpdate} from "./AutoModRule.js";
 import {ChannelCreate, ChannelDelete, ChannelUpdate} from "./Channel.js";
 import {GuildEmojisUpdate} from "./Emoji.js";
+import {GuildEventCreate, GuildEventDelete, GuildEventUpdate} from "./Event.js";
 import {GuildCreate, GuildDelete, GuildUpdate} from "./Guild.js";
 import {GuildMemberAdd, GuildMemberRemove, GuildMembersChunk, GuildMemberUpdate} from "./Member.js";
 import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./Message.js";
@@ -35,6 +36,9 @@ export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defau
     GUILD_ROLE_CREATE: GuildRoleCreate,
     GUILD_ROLE_UPDATE: GuildRoleUpdate,
     GUILD_ROLE_DELETE: GuildRoleDelete,
+    GUILD_SCHEDULED_EVENT_CREATE: GuildEventCreate,
+    GUILD_SCHEDULED_EVENT_UPDATE: GuildEventUpdate,
+    GUILD_SCHEDULED_EVENT_DELETE: GuildEventDelete,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
