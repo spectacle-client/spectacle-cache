@@ -19,7 +19,7 @@ export async function GuildEventCreate(broker: GatewayBroker, data: any) {
 
     console.log(`Cached ${key} (ttl: ${ttl})`);
 
-    await GuildEventCreateUpdateCascade(broker, parsed);
+    await GuildEventCreateUpdateDeleteCascade(broker, parsed);
 }
 
 export async function GuildEventUpdate(broker: GatewayBroker, data: any) {
@@ -31,7 +31,7 @@ export async function GuildEventUpdate(broker: GatewayBroker, data: any) {
 
     console.log(`Updated ${key} (ttl: ${ttl})`);
 
-    await GuildEventCreateUpdateCascade(broker, parsed);
+    await GuildEventCreateUpdateDeleteCascade(broker, parsed);
 }
 
 export async function GuildEventDelete(broker: GatewayBroker, data: any) {
@@ -40,9 +40,11 @@ export async function GuildEventDelete(broker: GatewayBroker, data: any) {
 
     await broker.cache!.del(key);
     console.log(`Deleted ${key}`);
+
+    await GuildEventCreateUpdateDeleteCascade(broker, parsed);
 }
 
-export async function GuildEventCreateUpdateCascade(broker: GatewayBroker, data: GatewayGuildScheduledEventCreateDispatchData | GatewayGuildScheduledEventUpdateDispatchData) {
+export async function GuildEventCreateUpdateDeleteCascade(broker: GatewayBroker, data: GatewayGuildScheduledEventCreateDispatchData | GatewayGuildScheduledEventUpdateDispatchData | GatewayGuildScheduledEventDeleteDispatchData) {
     if ("creator" in data && data.creator) {
         const key = `${CacheNames.User}:${data.creator.id}`;
         await update(broker.cache!, key, data.creator, broker.entityConfigMap.get(CacheNames.User)!.ttl);
