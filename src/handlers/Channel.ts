@@ -3,6 +3,7 @@ import {
     GatewayChannelDeleteDispatchData,
     GatewayChannelUpdateDispatchData
 } from "discord-api-types/v10";
+import {GatewayThreadListSyncDispatchData} from "discord-api-types/v10.js";
 import {GatewayBroker} from "../Broker.js";
 import {scanKeys} from "../util/redis/scanKeys.js";
 import {update} from "../util/redis/update.js";
@@ -59,6 +60,17 @@ export async function ChannelDelete(broker: GatewayBroker, data: any) {
         console.log(`[Cascade] Deleted ${messageKeys.length} messages from ${key}`);
     }
 }
+
+export async function ThreadListSync(broker: GatewayBroker, data: any) {
+    const parsed = JSON.parse(data) as GatewayThreadListSyncDispatchData;
+
+    for (const thread of parsed.threads) {
+        const channelKey = `${entity}:${parsed.guild_id}:${thread.id}`;
+        await update(broker.cache!, channelKey, thread, broker.entityConfigMap.get(entity)!.ttl);
+        console.log(`Updated ${channelKey} (ttl: ${broker.entityConfigMap.get(entity)!.ttl})`);
+    }
+}
+
 
 export async function ChannelCreateUpdateCascade(broker: GatewayBroker, data: GatewayChannelCreateDispatchData | GatewayChannelUpdateDispatchData) {
     if ("recipients" in data && data.recipients) {

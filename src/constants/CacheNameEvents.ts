@@ -20,6 +20,7 @@ export const CacheNameEvents = new Map<CacheNames, GatewayEvents[]>([
         GatewayDispatchEvents.ChannelCreate,
         GatewayDispatchEvents.ChannelUpdate,
         GatewayDispatchEvents.ChannelDelete,
+        GatewayDispatchEvents.ThreadListSync,
         GatewayDispatchEvents.GuildDelete,
     ]],
     [CacheNames.Guild, [
