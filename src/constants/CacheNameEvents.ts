@@ -111,8 +111,6 @@ export const CacheNameEvents = new Map<CacheNames, GatewayEvents[]>([
     ]],
     [CacheNames.User, [
         GatewayDispatchEvents.Ready,
-        GatewayDispatchEvents.ThreadListSync,
-        GatewayDispatchEvents.ThreadMembersUpdate,
         GatewayDispatchEvents.GuildCreate,
         GatewayDispatchEvents.GuildBanAdd,
         GatewayDispatchEvents.GuildBanRemove,
