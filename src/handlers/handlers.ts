@@ -3,6 +3,7 @@ import {GatewayEvents} from "../constants/CacheNameEvents.js";
 import {CacheNames} from "../util/validateConfig.js";
 import {AutoModRuleCreate, AutoModRuleDelete, AutoModRuleUpdate} from "./AutoModRule.js";
 import {ChannelCreate, ChannelDelete, ChannelUpdate} from "./Channel.js";
+import {GuildEmojisUpdate} from "./Emoji.js";
 import {GuildCreate, GuildDelete, GuildUpdate} from "./Guild.js";
 import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./Message.js";
 
@@ -24,6 +25,7 @@ export const handlers: Partial<Record<GatewayEvents, handler | genericHandler>> 
     AUTO_MODERATION_RULE_CREATE: AutoModRuleCreate,
     AUTO_MODERATION_RULE_UPDATE: AutoModRuleUpdate,
     AUTO_MODERATION_RULE_DELETE: AutoModRuleDelete,
+    GUILD_EMOJIS_UPDATE: GuildEmojisUpdate,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
