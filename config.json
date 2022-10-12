@@ -1,0 +1,23 @@
+{
+  "broker": {
+    "type": "redis",
+    "urls": ["localhost:6379"]
+  },
+  "cache": {
+    "urls": ["localhost:6380"]
+  },
+  "entities": {
+    "message": {
+      "ttl": 21600,
+      "id_only": true
+    },
+    "automodrule": {
+      "enabled": false
+    }
+  },
+  "default": {
+    "ttl": -1,
+    "key_path": true,
+    "id_only": false
+  }
+}
