@@ -1,6 +1,5 @@
 import {GatewayBroker} from "../Broker.js";
 import {GatewayEvents} from "../constants/CacheNameEvents.js";
-import {CacheNames} from "../util/validateConfig.js";
 import {AutoModRuleCreate, AutoModRuleDelete, AutoModRuleUpdate} from "./AutoModRule.js";
 import {ChannelCreate, ChannelDelete, ChannelUpdate} from "./Channel.js";
 import {GuildEmojisUpdate} from "./Emoji.js";
@@ -10,10 +9,9 @@ import {MessageCreate, MessageDelete, MessageDeleteBulk, MessageUpdate} from "./
 import {GuildStickersUpdate} from "./Sticker.js";
 
 export type handler = (broker: GatewayBroker, data: any) => Promise<void>;
-export type genericHandler = (entity: CacheNames, keyPath: ([string, string]|[string])[]) => Promise<void>;
 export type defaultHandler = (broker: GatewayBroker, event: string, data: any) => Promise<void>;
 
-export const handlers: Partial<Record<GatewayEvents, handler | genericHandler>> & {default: defaultHandler} = {
+export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defaultHandler} = {
     GUILD_CREATE: GuildCreate,
     GUILD_UPDATE: GuildUpdate,
     GUILD_DELETE: GuildDelete,
