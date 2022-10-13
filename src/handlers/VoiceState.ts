@@ -5,7 +5,7 @@ import {CacheNames} from "../util/validateConfig.js";
 
 const entity = CacheNames.VoiceState;
 
-export async function VoiceStateUpdate(broker: GatewayBroker, data: any) {
+export async function VoiceStateUpdate(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayVoiceStateUpdateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.user_id}`;
     await update(broker, entity, key, parsed);

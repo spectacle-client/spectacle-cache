@@ -5,7 +5,7 @@ import {CacheNames} from "../util/validateConfig.js";
 
 const entity = CacheNames.Sticker;
 
-export async function GuildStickersUpdate(broker: GatewayBroker, data: any) {
+export async function GuildStickersUpdate(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildStickersUpdateDispatchData;
 
     for (const sticker of parsed.stickers) {

@@ -10,25 +10,25 @@ import {CacheNames} from "../util/validateConfig.js";
 
 const entity = CacheNames.User;
 
-export async function Ready(broker: GatewayBroker, data: any) {
+export async function Ready(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayReadyDispatchData;
     const key = `${entity}:${parsed.user.id}`;
     await update(broker, entity, key, parsed.user);
 }
 
-export async function GuildBanAdd(broker: GatewayBroker, data: any) {
+export async function GuildBanAdd(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildBanAddDispatchData;
     const key = `${entity}:${parsed.user.id}`;
     await update(broker, entity, key, parsed.user);
 }
 
-export async function GuildBanRemove(broker: GatewayBroker, data: any) {
+export async function GuildBanRemove(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildBanAddDispatchData;
     const key = `${entity}:${parsed.user.id}`;
     await update(broker, entity, key, parsed.user);
 }
 
-export async function TypingStart(broker: GatewayBroker, data: any) {
+export async function TypingStart(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayTypingStartDispatchData;
 
     if ("member" in parsed && parsed.member) {
@@ -42,7 +42,7 @@ export async function TypingStart(broker: GatewayBroker, data: any) {
     }
 }
 
-export async function UserUpdate(broker: GatewayBroker, data: any) {
+export async function UserUpdate(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayUserUpdateDispatchData;
     const key = `${entity}:${parsed.id}`;
     await update(broker, entity, key, parsed);

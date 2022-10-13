@@ -5,19 +5,19 @@ import {CacheNames} from "../util/validateConfig.js";
 
 const entity = CacheNames.Role;
 
-export async function GuildRoleCreate(broker: GatewayBroker, data: any) {
+export async function GuildRoleCreate(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildRoleCreateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.role.id}`;
     await set(broker, entity, key, data);
 }
 
-export async function GuildRoleUpdate(broker: GatewayBroker, data: any) {
+export async function GuildRoleUpdate(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildRoleCreateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.role.id}`;
     await update(broker, entity, key, parsed.role);
 }
 
-export async function GuildRoleDelete(broker: GatewayBroker, data: any) {
+export async function GuildRoleDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildRoleCreateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.role.id}`;
     await del(broker, entity, key);
