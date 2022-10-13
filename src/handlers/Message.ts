@@ -15,7 +15,7 @@ export async function MessageCreate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.id}`;
     await set(broker, entity, key, data);
 
-    await MessageCreateUpdateCascade(broker, parsed);
+    await MessageCascade(broker, parsed);
 
     const channelKey = `${CacheNames.Channel}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}`;
     await update(broker, CacheNames.Channel, channelKey, {last_message_id: parsed.id}, true);
@@ -26,7 +26,7 @@ export async function MessageUpdate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.id}`;
     await update(broker, entity, key, parsed);
 
-    await MessageCreateUpdateCascade(broker, parsed);
+    await MessageCascade(broker, parsed);
 }
 
 export async function MessageDelete(broker: GatewayBroker, data: string) {
@@ -53,7 +53,7 @@ export async function MessageDeleteBulk(broker: GatewayBroker, data: string) {
     }
 }
 
-export async function MessageCreateUpdateCascade(broker: GatewayBroker, data: GatewayMessageCreateDispatchData | GatewayMessageUpdateDispatchData) {
+export async function MessageCascade(broker: GatewayBroker, data: GatewayMessageCreateDispatchData | GatewayMessageUpdateDispatchData) {
     if (!data.webhook_id && data.author) {
         const userKey = `${CacheNames.User}:${data.author.id}`;
         await update(broker, CacheNames.User, userKey, data.author);

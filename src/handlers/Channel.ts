@@ -15,7 +15,7 @@ export async function ChannelCreate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.id}`;
     await set(broker, entity, key, data);
 
-    await ChannelCreateUpdateCascade(broker, parsed);
+    await ChannelCascade(broker, parsed);
 }
 
 export async function ChannelUpdate(broker: GatewayBroker, data: string) {
@@ -23,7 +23,7 @@ export async function ChannelUpdate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.id}`;
     await update(broker, entity, key, parsed);
 
-    await ChannelCreateUpdateCascade(broker, parsed);
+    await ChannelCascade(broker, parsed);
 }
 
 export async function ChannelDelete(broker: GatewayBroker, data: string) {
@@ -42,20 +42,22 @@ export async function ChannelDelete(broker: GatewayBroker, data: string) {
 
     if (messageKeys.length > 0)
         await del(broker, CacheNames.Message, messageKeys, {cascade: true, originKey: key});
+
+    await ChannelCascade(broker, parsed);
 }
 
 export async function ThreadListSync(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayThreadListSyncDispatchData;
 
     for (const thread of parsed.threads) {
-        await ChannelCreateUpdateCascade(broker, thread);
+        await ChannelCascade(broker, thread);
 
         const channelKey = `${entity}:${parsed.guild_id}:${thread.id}`;
         await update(broker, entity, channelKey, thread);
     }
 }
 
-export async function ChannelCreateUpdateCascade(broker: GatewayBroker, data: GatewayChannelCreateDispatchData | GatewayChannelUpdateDispatchData) {
+export async function ChannelCascade(broker: GatewayBroker, data: GatewayChannelCreateDispatchData | GatewayChannelUpdateDispatchData | GatewayChannelDeleteDispatchData) {
     if ("recipients" in data && data.recipients) {
         for (const recipient of data.recipients) {
             const userKey = `${CacheNames.User}:${recipient.id}`;

@@ -1,4 +1,8 @@
-import {GatewayIntegrationCreateDispatchData, GatewayIntegrationUpdateDispatchData} from "discord-api-types/v10";
+import {
+    GatewayIntegrationCreateDispatchData,
+    GatewayIntegrationDeleteDispatchData,
+    GatewayIntegrationUpdateDispatchData
+} from "discord-api-types/v10";
 import {GatewayBroker} from "../Broker.js";
 import {del, set, update} from "../util/redis/index.js";
 import {CacheNames} from "../util/validateConfig.js";
@@ -22,7 +26,7 @@ export async function IntegrationUpdate(broker: GatewayBroker, data: string) {
 }
 
 export async function IntegrationDelete(broker: GatewayBroker, data: string) {
-    const parsed = JSON.parse(data) as GatewayIntegrationUpdateDispatchData;
+    const parsed = JSON.parse(data) as GatewayIntegrationDeleteDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.id}`;
     await del(broker, entity, key);
 }

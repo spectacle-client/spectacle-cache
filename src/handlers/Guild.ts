@@ -14,7 +14,7 @@ export async function GuildCreate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.id}`;
     await set(broker, entity, key, data);
 
-    await GuildCreateUpdateCascade(broker, parsed);
+    await GuildCascade(broker, parsed);
 }
 
 export async function GuildUpdate(broker: GatewayBroker, data: string) {
@@ -22,7 +22,7 @@ export async function GuildUpdate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.id}`;
     await update(broker, entity, key, parsed);
 
-    await GuildCreateUpdateCascade(broker, parsed);
+    await GuildCascade(broker, parsed);
 }
 
 export async function GuildDelete(broker: GatewayBroker, data: string) {
@@ -94,7 +94,7 @@ export async function GuildDelete(broker: GatewayBroker, data: string) {
         await del(broker, CacheNames.Presence, presenceKeys, {cascade: true, originKey: key});
 }
 
-export async function GuildCreateUpdateCascade(broker: GatewayBroker, data: GatewayGuildCreateDispatchData | GatewayGuildUpdateDispatchData) {
+export async function GuildCascade(broker: GatewayBroker, data: GatewayGuildCreateDispatchData | GatewayGuildUpdateDispatchData) {
     if ("voice_states" in data && data.voice_states) {
         for (const voiceState of data.voice_states) {
             if (!voiceState.channel_id) continue;

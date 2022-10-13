@@ -15,7 +15,7 @@ export async function GuildMemberAdd(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.guild_id}:${parsed.user!.id}`;
     await set(broker, entity, key, data);
 
-    await GuildMemberAddUpdateCascade(broker, parsed);
+    await GuildMemberCascade(broker, parsed);
 }
 
 export async function GuildMemberUpdate(broker: GatewayBroker, data: string) {
@@ -23,13 +23,15 @@ export async function GuildMemberUpdate(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.guild_id}:${parsed.user.id}`;
     await update(broker, entity, key, parsed);
 
-    await GuildMemberAddUpdateCascade(broker, parsed);
+    await GuildMemberCascade(broker, parsed);
 }
 
 export async function GuildMemberRemove(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildMemberRemoveDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.user.id}`;
     await del(broker, entity, key);
+
+    await GuildMemberCascade(broker, parsed);
 }
 
 export async function GuildMembersChunk(broker: GatewayBroker, data: string) {
@@ -51,7 +53,7 @@ export async function GuildMembersChunk(broker: GatewayBroker, data: string) {
     }
 }
 
-export async function GuildMemberAddUpdateCascade(broker: GatewayBroker, data: GatewayGuildMemberAddDispatchData | GatewayGuildMemberUpdateDispatchData) {
+export async function GuildMemberCascade(broker: GatewayBroker, data: GatewayGuildMemberAddDispatchData | GatewayGuildMemberUpdateDispatchData | GatewayGuildMemberRemoveDispatchData) {
     if (data.user) {
         const userKey = `${CacheNames.User}:${data.user.id}`;
         await update(broker, CacheNames.User, userKey, data.user);
