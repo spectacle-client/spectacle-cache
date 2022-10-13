@@ -34,7 +34,7 @@ export async function ChannelDelete(broker: GatewayBroker, data: string) {
     const messageKeys = await scanKeys(broker, `${CacheNames.Message}:${parsed.guild_id ?? "dm"}:${parsed.id}:*`);
 
     for (const messageKey of messageKeys) {
-        const reactionKeys = await broker.cache!.keys(`${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.id}:${messageKey.split(":")[3]}:*`);
+        const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.id}:${messageKey.split(":")[3]}:*`);
 
         if (reactionKeys.length > 0)
             await del(broker, reactionKeys, {cascade: true, originKey: messageKey});

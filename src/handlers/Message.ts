@@ -46,7 +46,7 @@ export async function MessageDeleteBulk(broker: GatewayBroker, data: string) {
     await del(broker, keys, {originKey: `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}`});
 
     for (const messageKey of keys) {
-        const reactionKeys = await broker.cache!.keys(`${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${messageKey.split(":")[3]}:*`);
+        const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${messageKey.split(":")[3]}:*`);
 
         if (reactionKeys.length > 0)
             await del(broker, reactionKeys, {cascade: true, originKey: messageKey});

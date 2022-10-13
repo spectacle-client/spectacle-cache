@@ -4,7 +4,7 @@ import {
     GatewayGuildUpdateDispatchData
 } from "discord-api-types/v10";
 import {GatewayBroker} from "../Broker.js";
-import {del, set, update} from "../util/redis/index.js";
+import {del, scanKeys, set, update} from "../util/redis/index.js";
 import {CacheNames} from "../util/validateConfig.js";
 
 const entity = CacheNames.Guild;
@@ -30,13 +30,13 @@ export async function GuildDelete(broker: GatewayBroker, data: string) {
     const key = `${entity}:${parsed.id}`;
     await del(broker, key);
 
-    const channelKeys = await broker.cache!.keys(`${CacheNames.Channel}:${parsed.id}:*`);
+    const channelKeys = await scanKeys(broker, `${CacheNames.Channel}:${parsed.id}:*`);
     for (const channelKey of channelKeys) {
         const channelId = channelKey.split(":")[2];
-        const messageKeys = await broker.cache!.keys(`${CacheNames.Message}:${parsed.id}:${channelId}:*`);
+        const messageKeys = await scanKeys(broker, `${CacheNames.Message}:${parsed.id}:${channelId}:*`);
 
         for (const messageKey of messageKeys) {
-            const reactionKeys = await broker.cache!.keys(`${CacheNames.Reaction}:${parsed.id}:${channelId}:${messageKey.split(":")[3]}:*`);
+            const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.id}:${channelId}:${messageKey.split(":")[3]}:*`);
 
             if (reactionKeys.length > 0)
                 await del(broker, reactionKeys, {cascade: true, originKey: messageKey});
@@ -45,7 +45,7 @@ export async function GuildDelete(broker: GatewayBroker, data: string) {
         if (messageKeys.length > 0)
             await del(broker, messageKeys, {cascade: true, originKey: channelKey});
 
-        const voiceStateKeys = await broker.cache!.keys(`${CacheNames.VoiceState}:${parsed.id}:${channelId}:*`);
+        const voiceStateKeys = await scanKeys(broker, `${CacheNames.VoiceState}:${parsed.id}:${channelId}:*`);
         if (voiceStateKeys.length > 0)
             await del(broker, voiceStateKeys, {cascade: true, originKey: channelKey});
     }
@@ -53,43 +53,43 @@ export async function GuildDelete(broker: GatewayBroker, data: string) {
     if (channelKeys.length > 0)
         await del(broker, channelKeys, {cascade: true, originKey: key});
 
-    const autoModRuleKeys = await broker.cache!.keys(`${CacheNames.AutoModRule}:${parsed.id}:*`);
+    const autoModRuleKeys = await scanKeys(broker, `${CacheNames.AutoModRule}:${parsed.id}:*`);
     if (autoModRuleKeys.length > 0)
         await del(broker, autoModRuleKeys, {cascade: true, originKey: key});
 
-    const emojiKeys = await broker.cache!.keys(`${CacheNames.Emoji}:${parsed.id}:*`);
+    const emojiKeys = await scanKeys(broker, `${CacheNames.Emoji}:${parsed.id}:*`);
     if (emojiKeys.length > 0)
         await del(broker, emojiKeys, {cascade: true, originKey: key});
 
-    const stickerKeys = await broker.cache!.keys(`${CacheNames.Sticker}:${parsed.id}:*`);
+    const stickerKeys = await scanKeys(broker, `${CacheNames.Sticker}:${parsed.id}:*`);
     if (stickerKeys.length > 0)
         await del(broker, stickerKeys, {cascade: true, originKey: key});
 
-    const memberKeys = await broker.cache!.keys(`${CacheNames.Member}:${parsed.id}:*`);
+    const memberKeys = await scanKeys(broker, `${CacheNames.Member}:${parsed.id}:*`);
     if (memberKeys.length > 0)
         await del(broker, memberKeys, {cascade: true, originKey: key});
 
-    const roleKeys = await broker.cache!.keys(`${CacheNames.Role}:${parsed.id}:*`);
+    const roleKeys = await scanKeys(broker, `${CacheNames.Role}:${parsed.id}:*`);
     if (roleKeys.length > 0)
         await del(broker, roleKeys, {cascade: true, originKey: key});
 
-    const eventKeys = await broker.cache!.keys(`${CacheNames.Event}:${parsed.id}:*`);
+    const eventKeys = await scanKeys(broker, `${CacheNames.Event}:${parsed.id}:*`);
     if (eventKeys.length > 0)
         await del(broker, eventKeys, {cascade: true, originKey: key});
 
-    const integrationKeys = await broker.cache!.keys(`${CacheNames.Integration}:${parsed.id}:*`);
+    const integrationKeys = await scanKeys(broker, `${CacheNames.Integration}:${parsed.id}:*`);
     if (integrationKeys.length > 0)
         await del(broker, integrationKeys, {cascade: true, originKey: key});
 
-    const inviteKeys = await broker.cache!.keys(`${CacheNames.Invite}:${parsed.id}:*`);
+    const inviteKeys = await scanKeys(broker, `${CacheNames.Invite}:${parsed.id}:*`);
     if (inviteKeys.length > 0)
         await del(broker, inviteKeys, {cascade: true, originKey: key});
 
-    const stageKeys = await broker.cache!.keys(`${CacheNames.Stage}:${parsed.id}:*`);
+    const stageKeys = await scanKeys(broker, `${CacheNames.Stage}:${parsed.id}:*`);
     if (stageKeys.length > 0)
         await del(broker, stageKeys, {cascade: true, originKey: key});
 
-    const presenceKeys = await broker.cache!.keys(`${CacheNames.Presence}:${parsed.id}:*`);
+    const presenceKeys = await scanKeys(broker, `${CacheNames.Presence}:${parsed.id}:*`);
     if (presenceKeys.length > 0)
         await del(broker, presenceKeys, {cascade: true, originKey: key});
 }
