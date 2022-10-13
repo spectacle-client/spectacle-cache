@@ -1,7 +1,7 @@
 import {GatewayBroker} from "../Broker.js";
 import {GatewayEvents} from "../constants/CacheNameEvents.js";
 import {AutoModRuleCreate, AutoModRuleDelete, AutoModRuleUpdate} from "./AutoModRule.js";
-import {ChannelCreate, ChannelDelete, ChannelUpdate} from "./Channel.js";
+import {ChannelCreate, ChannelDelete, ChannelUpdate, ThreadListSync} from "./Channel.js";
 import {GuildEmojisUpdate} from "./Emoji.js";
 import {GuildEventCreate, GuildEventDelete, GuildEventUpdate} from "./Event.js";
 import {GuildCreate, GuildDelete, GuildUpdate} from "./Guild.js";
@@ -17,8 +17,8 @@ import {GuildStickersUpdate} from "./Sticker.js";
 import {GuildBanAdd, GuildBanRemove, Ready, TypingStart, UserUpdate} from "./User.js";
 import {VoiceStateUpdate} from "./VoiceState.js";
 
-export type handler = (broker: GatewayBroker, data: any) => Promise<void>;
-export type defaultHandler = (broker: GatewayBroker, event: string, data: any) => Promise<void>;
+export type handler = (broker: GatewayBroker, data: string) => Promise<void>;
+export type defaultHandler = (broker: GatewayBroker, event: string, data: string) => Promise<void>;
 
 export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defaultHandler} = {
     GUILD_CREATE: GuildCreate,
@@ -65,6 +65,7 @@ export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defau
     GUILD_BAN_REMOVE: GuildBanRemove,
     TYPING_START: TypingStart,
     USER_UPDATE: UserUpdate,
+    THREAD_LIST_SYNC: ThreadListSync,
     default: async (_: GatewayBroker, event: string) => {
         console.log(`Received unsupported event from gateway: ${event}`);
     }
