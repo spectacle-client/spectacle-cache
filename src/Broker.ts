@@ -115,10 +115,14 @@ export class GatewayBroker {
         this.calculateEvents();
 
         for (const event of this.gatewayEvents)
+        {
             this.broker.on(event, handlers[event]
                 // @ts-ignore
-            ? handlers[event]!.bind(null, this)
-            : handlers.default.bind(null, this, event));
+                ? handlers[event]!.bind(null, this)
+                : handlers.default.bind(null, this, event));
+
+            this.broker.on(event, (_, { ack }) => ack());
+        }
 
         this.broker.subscribe(this.gatewayEvents);
         console.log(`Subscribed to ${this.gatewayEvents.length} events`);
