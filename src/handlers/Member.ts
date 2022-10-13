@@ -29,7 +29,7 @@ export async function GuildMemberUpdate(broker: GatewayBroker, data: string) {
 export async function GuildMemberRemove(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildMemberRemoveDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.user.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }
 
 export async function GuildMembersChunk(broker: GatewayBroker, data: string) {

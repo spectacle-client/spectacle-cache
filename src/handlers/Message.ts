@@ -32,24 +32,24 @@ export async function MessageUpdate(broker: GatewayBroker, data: string) {
 export async function MessageDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageDeleteDispatchData;
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 
     const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.id}:*`);
 
     if (reactionKeys.length > 0)
-        await del(broker, reactionKeys, {cascade: true, originKey: key});
+        await del(broker, CacheNames.Reaction, reactionKeys, {cascade: true, originKey: key});
 }
 
 export async function MessageDeleteBulk(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageDeleteBulkDispatchData;
     const keys = parsed.ids.map(id => `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${id}`);
-    await del(broker, keys, {originKey: `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}`});
+    await del(broker, entity, keys, {originKey: `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}`});
 
     for (const messageKey of keys) {
         const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${messageKey.split(":")[3]}:*`);
 
         if (reactionKeys.length > 0)
-            await del(broker, reactionKeys, {cascade: true, originKey: messageKey});
+            await del(broker, CacheNames.Reaction, reactionKeys, {cascade: true, originKey: messageKey});
     }
 }
 

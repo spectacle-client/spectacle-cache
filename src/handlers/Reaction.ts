@@ -36,7 +36,7 @@ export async function MessageReactionRemove(broker: GatewayBroker, data: string)
     const newData = oldData.filter((id: string) => id !== parsed.user_id);
 
     if (newData.length === 0) {
-        await del(broker, key);
+        await del(broker, entity, key);
     } else {
         await set(broker, entity, key, JSON.stringify(newData), {update: true});
     }
@@ -48,11 +48,11 @@ export async function MessageReactionRemoveAll(broker: GatewayBroker, data: stri
     const keys = await scanKeys(broker, pattern);
 
     if (keys.length > 0)
-        await del(broker, keys, {originKey: pattern});
+        await del(broker, entity, keys, {originKey: pattern});
 }
 
 export async function MessageReactionRemoveEmoji(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageReactionRemoveEmojiDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }

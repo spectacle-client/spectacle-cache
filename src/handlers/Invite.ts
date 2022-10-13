@@ -24,5 +24,5 @@ export async function InviteCreate(broker: GatewayBroker, data: string) {
 export async function InviteDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayInviteCreateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.code}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }

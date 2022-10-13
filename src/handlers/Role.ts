@@ -20,5 +20,5 @@ export async function GuildRoleUpdate(broker: GatewayBroker, data: any) {
 export async function GuildRoleDelete(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayGuildRoleCreateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.role.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }

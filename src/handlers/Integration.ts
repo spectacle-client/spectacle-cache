@@ -24,7 +24,7 @@ export async function IntegrationUpdate(broker: GatewayBroker, data: string) {
 export async function IntegrationDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayIntegrationUpdateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }
 
 export async function IntegrationCreateUpdateCascade(broker: GatewayBroker, data: GatewayIntegrationCreateDispatchData | GatewayIntegrationUpdateDispatchData) {

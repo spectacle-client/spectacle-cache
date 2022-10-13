@@ -28,7 +28,7 @@ export async function GuildEventUpdate(broker: GatewayBroker, data: string) {
 export async function GuildEventDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildScheduledEventDeleteDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 
     await GuildEventCreateUpdateDeleteCascade(broker, parsed);
 }

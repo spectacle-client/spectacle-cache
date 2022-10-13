@@ -20,5 +20,5 @@ export async function StageInstanceUpdate(broker: GatewayBroker, data: any) {
 export async function StageInstanceDelete(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayStageInstanceCreateDispatchData;
     const key = `${entity}:${parsed.guild_id}:${parsed.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }

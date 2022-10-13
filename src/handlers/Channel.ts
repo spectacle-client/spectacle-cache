@@ -29,7 +29,7 @@ export async function ChannelUpdate(broker: GatewayBroker, data: string) {
 export async function ChannelDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayChannelDeleteDispatchData & {guild_id?: string};
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 
     const messageKeys = await scanKeys(broker, `${CacheNames.Message}:${parsed.guild_id ?? "dm"}:${parsed.id}:*`);
 
@@ -37,11 +37,11 @@ export async function ChannelDelete(broker: GatewayBroker, data: string) {
         const reactionKeys = await scanKeys(broker, `${CacheNames.Reaction}:${parsed.guild_id ?? "dm"}:${parsed.id}:${messageKey.split(":")[3]}:*`);
 
         if (reactionKeys.length > 0)
-            await del(broker, reactionKeys, {cascade: true, originKey: messageKey});
+            await del(broker, CacheNames.Reaction, reactionKeys, {cascade: true, originKey: messageKey});
     }
 
     if (messageKeys.length > 0)
-        await del(broker, messageKeys, {cascade: true, originKey: key});
+        await del(broker, CacheNames.Message, messageKeys, {cascade: true, originKey: key});
 }
 
 export async function ThreadListSync(broker: GatewayBroker, data: any) {

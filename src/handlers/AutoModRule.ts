@@ -19,5 +19,5 @@ export async function AutoModRuleUpdate(broker: GatewayBroker, data: string) {
 export async function AutoModRuleDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data);
     const key = `${entity}:${parsed.guild_id}:${parsed.id}`;
-    await del(broker, key);
+    await del(broker, entity, key);
 }
