@@ -48,11 +48,12 @@ export async function ThreadListSync(broker: GatewayBroker, data: any) {
     const parsed = JSON.parse(data) as GatewayThreadListSyncDispatchData;
 
     for (const thread of parsed.threads) {
+        await ChannelCreateUpdateCascade(broker, thread);
+
         const channelKey = `${entity}:${parsed.guild_id}:${thread.id}`;
         await update(broker, entity, channelKey, thread);
     }
 }
-
 
 export async function ChannelCreateUpdateCascade(broker: GatewayBroker, data: GatewayChannelCreateDispatchData | GatewayChannelUpdateDispatchData) {
     if ("recipients" in data && data.recipients) {
