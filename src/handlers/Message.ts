@@ -95,8 +95,8 @@ export async function MessageCascade(broker: GatewayBroker, data: GatewayMessage
         await update(broker, CacheNames.Channel, threadKey, data.thread);
     }
 
-    if (data.stickers) {
-        for (const sticker of data.stickers) {
+    if (data.sticker_items) {
+        for (const sticker of data.sticker_items) {
             const stickerKey = `${CacheNames.Sticker}:${sticker.id}`;
             await update(broker, CacheNames.Sticker, stickerKey, sticker);
         }
