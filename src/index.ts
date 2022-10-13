@@ -1,8 +1,9 @@
-import {GatewayBroker} from "./Broker.js";
+import {fork} from "child_process";
 
-const broker = new GatewayBroker("./config.json");
+const workerCount = parseInt(process.env.WORKER_COUNT || '4');
+const workerFile = "dist/worker.js";
 
-await broker.connectBroker();
-await broker.connectCache();
-
-broker.subscribe()
+for (let i = 0; i < workerCount; i++) {
+  fork(workerFile);
+  console.log(`Spawned worker ${i}`);
+}
