@@ -54,48 +54,48 @@ export async function MessageDeleteBulk(broker: GatewayBroker, data: string) {
 }
 
 export async function MessageCreateUpdateCascade(broker: GatewayBroker, data: GatewayMessageCreateDispatchData | GatewayMessageUpdateDispatchData) {
-    if (!data.webhook_id && data.author && broker.entityConfigMap.get(CacheNames.User)) {
+    if (!data.webhook_id && data.author) {
         const userKey = `${CacheNames.User}:${data.author.id}`;
         await update(broker, CacheNames.User, userKey, data.author);
     }
 
-    if (data.member && data.author && broker.entityConfigMap.get(CacheNames.Member)) {
+    if (data.member && data.author) {
         const memberKey = `${CacheNames.Member}:${data.guild_id}:${data.author.id}`;
         await update(broker, CacheNames.Member, memberKey, data.member);
     }
 
-    if (data.mentions && broker.entityConfigMap.get(CacheNames.User)) {
+    if (data.mentions) {
         for (const user of data.mentions) {
             const userKey = `${CacheNames.User}:${user.id}`;
             await update(broker, CacheNames.User, userKey, user);
         }
     }
 
-    if (data.mention_roles && broker.entityConfigMap.get(CacheNames.Role)) {
+    if (data.mention_roles) {
         for (const role of data.mention_roles) {
             const roleKey = `${CacheNames.Role}:${data.guild_id}:${role}`;
             await update(broker, CacheNames.Role, roleKey, {mentionable: true});
         }
     }
 
-    if (data.mention_channels && broker.entityConfigMap.get(CacheNames.Channel)) {
+    if (data.mention_channels) {
         for (const channel of data.mention_channels) {
             const channelKey = `${CacheNames.Channel}:${data.guild_id}:${channel.id}`;
             await update(broker, CacheNames.Channel, channelKey, {mentionable: true});
         }
     }
 
-    if (data.referenced_message && broker.entityConfigMap.get(CacheNames.Message)) {
+    if (data.referenced_message) {
         const messageKey = `${CacheNames.Message}:${data.guild_id ?? "dm"}:${data.referenced_message.channel_id}:${data.referenced_message.id}`;
         await update(broker, CacheNames.Message, messageKey, data.referenced_message);
     }
 
-    if (data.thread && broker.entityConfigMap.get(CacheNames.Channel)) {
+    if (data.thread) {
         const threadKey = `${CacheNames.Channel}:${data.guild_id}:${data.thread.id}`;
         await update(broker, CacheNames.Channel, threadKey, data.thread);
     }
 
-    if (data.stickers && broker.entityConfigMap.get(CacheNames.Sticker)) {
+    if (data.stickers) {
         for (const sticker of data.stickers) {
             const stickerKey = `${CacheNames.Sticker}:${sticker.id}`;
             await update(broker, CacheNames.Sticker, stickerKey, sticker);
