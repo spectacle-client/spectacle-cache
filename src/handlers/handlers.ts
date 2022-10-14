@@ -58,7 +58,7 @@ export const handlers: Partial<Record<GatewayEvents, handler>> & {default: defau
     STAGE_INSTANCE_CREATE: StageInstanceCreate,
     STAGE_INSTANCE_UPDATE: StageInstanceUpdate,
     STAGE_INSTANCE_DELETE: StageInstanceDelete,
-    VOICE_SERVER_UPDATE: VoiceStateUpdate,
+    VOICE_STATE_UPDATE: VoiceStateUpdate,
     PRESENCE_UPDATE: PresenceUpdate,
     READY: Ready,
     GUILD_BAN_ADD: GuildBanAdd,
