@@ -9,7 +9,7 @@ export async function GuildStickersUpdate(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildStickersUpdateDispatchData;
 
     for (const sticker of parsed.stickers) {
-        const key = `${entity}:${parsed.guild_id}:${sticker.id}`;
+        const key = `${entity}:${sticker.id}`;
         await set(broker, entity, key, data);
     }
 }

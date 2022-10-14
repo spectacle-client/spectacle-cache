@@ -10,7 +10,7 @@ export async function GuildEmojisUpdate(broker: GatewayBroker, data: string) {
 
     for (const emoji of parsed.emojis) {
         if (!emoji.id) continue;
-        const key = `${entity}:${parsed.guild_id}:${emoji.id}`;
+        const key = `${entity}:${emoji.id}`;
         await set(broker, entity, key, JSON.stringify(emoji));
     }
 }

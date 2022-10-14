@@ -28,6 +28,7 @@ export async function GuildUpdate(broker: GatewayBroker, data: string) {
 export async function GuildDelete(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayGuildDeleteDispatchData;
     const key = `${entity}:${parsed.id}`;
+    const oldData = JSON.parse(await broker.cache!.get(key) || "{}");
     await del(broker, entity, key);
 
     const channelKeys = await scanKeys(broker, `${CacheNames.Channel}:${parsed.id}:*`);
@@ -57,11 +58,11 @@ export async function GuildDelete(broker: GatewayBroker, data: string) {
     if (autoModRuleKeys.length > 0)
         await del(broker, CacheNames.AutoModRule, autoModRuleKeys, {cascade: true, originKey: key});
 
-    const emojiKeys = await scanKeys(broker, `${CacheNames.Emoji}:${parsed.id}:*`);
+    const emojiKeys = oldData?.dedupe.emojis || [];
     if (emojiKeys.length > 0)
         await del(broker, CacheNames.Emoji, emojiKeys, {cascade: true, originKey: key});
 
-    const stickerKeys = await scanKeys(broker, `${CacheNames.Sticker}:${parsed.id}:*`);
+    const stickerKeys = oldData?.dedupe.stickers || [];
     if (stickerKeys.length > 0)
         await del(broker, CacheNames.Sticker, stickerKeys, {cascade: true, originKey: key});
 
