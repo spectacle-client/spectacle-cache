@@ -1,6 +1,6 @@
 import {Amqp as AmqpBroker, Broker, Redis as RedisBroker} from "@spectacles/brokers";
 import {readFileSync} from "fs";
-import Redis, {Cluster} from "ioredis";
+import Redis, {Cluster, Result} from "ioredis";
 import * as Util from "util";
 import {CacheNameEvents, GatewayEvents} from "./constants/CacheNameEvents.js";
 import {handlers} from "./handlers/handlers.js";
@@ -9,6 +9,12 @@ import {CacheNames, Config, validateConfig} from "./util/validateConfig.js";
 export interface EntityConfig {
     prefix: string,
     ttl: number,
+}
+
+declare module "ioredis" {
+    interface RedisCommander<Context> {
+        getFull(key: string): Result<string, Context>;
+    }
 }
 
 export class GatewayBroker {
@@ -55,6 +61,11 @@ export class GatewayBroker {
             await redis.connect();
             this.cache = redis;
         }
+
+        this.cache.defineCommand("getFull", {
+            numberOfKeys: 1,
+            lua: readFileSync("node_modules/@spectacle-client/dedupe.ts/scripts/getfull.lua", "utf8"),
+        })
     }
 
     private calculateEvents() {

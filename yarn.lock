@@ -12,6 +12,13 @@
   resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.8.0.tgz#4210deb771ee3912964f14a15ddfb5ff877e70b9"
   integrity sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==
 
+"@spectacle-client/dedupe.ts@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@spectacle-client/dedupe.ts/-/dedupe.ts-0.1.0.tgz#adae39ce9bbfc8f725faba04c521098105608120"
+  integrity sha512-9EtBlqeO7OBil7SYbDNl4gMstVSA6mGeifFuV2jWPCTlh4vYoWt+JO8QEbz/E6ljZJaYLxGOloatPm2w2YTLVw==
+  dependencies:
+    discord-api-types "^0.37.12"
+
 "@spectacles/brokers@^0.9.3":
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/@spectacles/brokers/-/brokers-0.9.3.tgz#e837219a6c77191ce27f0b5dc6825d6dd7b45709"

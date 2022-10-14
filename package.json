@@ -12,6 +12,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@spectacle-client/dedupe.ts": "^0.1.0",
     "@spectacles/brokers": "^0.9.3",
     "discord-api-types": "^0.37.12",
     "ioredis": "^5.2.3"
