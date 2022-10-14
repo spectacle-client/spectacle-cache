@@ -5,5 +5,6 @@ import {set} from "./set.js";
 export async function update(broker: GatewayBroker, entity: CacheNames, key: string, data: {[key: string]: any}, cascade = false)  {
     const oldData = await broker.cache!.get(key);
     const newData = JSON.stringify({...JSON.parse(oldData || "{}"), ...data});
+    if (oldData === newData) return;
     await set(broker, entity, key, newData, {cascade, update: true});
 }
