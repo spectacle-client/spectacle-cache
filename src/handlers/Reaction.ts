@@ -12,14 +12,14 @@ const entity = CacheNames.Reaction;
 
 export async function MessageReactionAdd(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageReactionAddDispatchData;
-    const key = `${entity}:${parsed.guild_id}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
+    const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
 
     const oldData = JSON.parse(await broker.cache!.get(key) || '[]');
     const newData = [...oldData, parsed.user_id];
 
     await set(broker, entity, key, JSON.stringify(newData), {update: true});
 
-    if ("member" in parsed && parsed.member) {
+    if ("member" in parsed && parsed.member && parsed.guild_id) {
         const memberKey = `${CacheNames.Member}:${parsed.guild_id}:${parsed.user_id}`;
         await update(broker, CacheNames.Member, memberKey, parsed.member);
 
@@ -30,7 +30,7 @@ export async function MessageReactionAdd(broker: GatewayBroker, data: string) {
 
 export async function MessageReactionRemove(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageReactionRemoveDispatchData;
-    const key = `${entity}:${parsed.guild_id}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
+    const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
 
     const oldData = JSON.parse(await broker.cache!.get(key) || '[]');
     const newData = oldData.filter((id: string) => id !== parsed.user_id);
