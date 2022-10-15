@@ -28,7 +28,7 @@ export async function MessageReactionAdd(broker: GatewayBroker, data: string) {
     } else {
         oldData = "[]";
     }
-    const newData = [...JSON.parse(oldData), parsed.user_id];
+    const newData = [...oldData, parsed.user_id];
 
     await set(broker, entity, key, JSON.stringify(newData), {update: true});
 
