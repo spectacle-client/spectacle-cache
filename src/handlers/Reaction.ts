@@ -7,8 +7,6 @@ import {
 import {GatewayBroker} from "../Broker.js";
 import {del, scanKeys, set, update} from "../util/redis/index.js";
 import {CacheNames} from "../util/validateConfig.js";
-// @ts-ignore
-import {decompress} from 'cppzst';
 
 const entity = CacheNames.Reaction;
 
@@ -16,18 +14,7 @@ export async function MessageReactionAdd(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageReactionAddDispatchData;
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
 
-    const compressed = await broker.cache!.get(key)
-    let oldData;
-    if (compressed) {
-        try {
-            oldData = await decompress(compressed);
-        } catch (err: any) {
-            console.warn(`Failed to decompress ${key}! (Content: ${compressed})`);
-            console.warn(err);
-        }
-    } else {
-        oldData = "[]";
-    }
+    const oldData = JSON.parse(await broker.cache!.get(key) || '[]');
     const newData = [...oldData, parsed.user_id];
 
     await set(broker, entity, key, JSON.stringify(newData), {update: true});
