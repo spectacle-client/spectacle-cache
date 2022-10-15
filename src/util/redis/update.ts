@@ -6,7 +6,7 @@ import {decompress} from 'cppzst';
 
 export async function update(broker: GatewayBroker, entity: CacheNames, key: string, data: {[key: string]: any}, cascade = false)  {
     const dict = broker.dictMap.get(entity);
-    const decompressOptions = dict ? {dict} : {};
+    const decompressOptions = dict ? {dict: dict} : {};
     const compressed = await broker.cache!.getBuffer(key);
 
     let oldData
