@@ -16,7 +16,7 @@ export async function MessageReactionAdd(broker: GatewayBroker, data: string) {
     const parsed = JSON.parse(data) as GatewayMessageReactionAddDispatchData;
     const key = `${entity}:${parsed.guild_id ?? "dm"}:${parsed.channel_id}:${parsed.message_id}:${parsed.emoji.id ?? parsed.emoji.name}`;
 
-    const compressed = await broker.cache!.get(key)
+    const compressed = await broker.cache!.getBuffer(key)
     let oldData;
     if (compressed) {
         try {
