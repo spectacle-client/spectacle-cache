@@ -10,7 +10,7 @@ export async function set(broker: GatewayBroker, entity: CacheNames, key: string
 
     const deduplicated = JSON.stringify(deduplicate(entity, JSON.parse(data)));
     const dict = broker.dictMap.get(entity);
-    const compressOptions = dict ? {dict: dict, compressionLevel: 3} : {compressionLevel: 3};
+    const compressOptions = dict ? {dict, compressionLevel: 1} : {compressionLevel: 1};
     const compressed = await compress(Buffer.from(deduplicated), compressOptions);
 
     if (config.ttl === -1) {
