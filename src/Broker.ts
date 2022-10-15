@@ -1,7 +1,6 @@
 import {Amqp as AmqpBroker, Broker, Redis as RedisBroker} from "@spectacles/brokers";
 import {readFileSync} from "fs";
-import {readFile} from "fs/promises";
-import Redis, {Cluster} from "ioredis";
+import Redis, {Cluster, Result} from "ioredis";
 import * as Util from "util";
 import {CacheNameEvents, GatewayEvents} from "./constants/CacheNameEvents.js";
 import {handlers} from "./handlers/handlers.js";
@@ -12,13 +11,18 @@ export interface EntityConfig {
     ttl: number,
 }
 
+declare module "ioredis" {
+    interface RedisCommander<Context> {
+        getFull(key: string): Result<string, Context>;
+    }
+}
+
 export class GatewayBroker {
     private broker: Broker | null = null;
     public cache: Redis | Cluster | null = null;
     public gatewayEvents: GatewayEvents[] = [];
     public readonly config: Config;
     public readonly entityConfigMap = new Map<string, EntityConfig>();
-    public readonly dictMap: Map<CacheNames, Buffer> = new Map();
 
     public constructor(configPath: string) {
         const jsonFile = readFileSync(configPath, "utf8");
@@ -58,15 +62,10 @@ export class GatewayBroker {
             this.cache = redis;
         }
 
-        for (const entity of Object.values(CacheNames)) {
-            if (entity === CacheNames.Stage || entity === CacheNames.AutoModRule || entity === CacheNames.Reaction) continue;
-            try {
-                const dict = readFile(`dicts/${entity}.dict`);
-                this.dictMap.set(entity, await dict);
-            } catch(e: any) {
-                console.warn(`Failed to load dictionary for ${entity}: ${e.message}`);
-            }
-        }
+        this.cache.defineCommand("getFull", {
+            numberOfKeys: 1,
+            lua: readFileSync("node_modules/@spectacle-client/dedupe.ts/scripts/getfull.lua", "utf8"),
+        })
     }
 
     private calculateEvents() {
