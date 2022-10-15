@@ -14,6 +14,7 @@
   "dependencies": {
     "@spectacle-client/dedupe.ts": "^0.1.0",
     "@spectacles/brokers": "^0.9.3",
+    "cppzst": "^2.0.7",
     "discord-api-types": "^0.37.12",
     "ioredis": "^5.2.3"
   },
