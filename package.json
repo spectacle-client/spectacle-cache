@@ -1,6 +1,6 @@
 {
   "name": "spectacle-cache",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A fully configurable, standalone service to cache anything from spec-tacles/gateway",
   "main": "dist/index.js",
   "type": "module",
@@ -12,7 +12,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@spectacle-client/dedupe.ts": "^0.1.0",
+    "@spectacle-client/dedupe.ts": "^1.0.0",
     "@spectacles/brokers": "^0.9.3",
     "discord-api-types": "^0.37.12",
     "ioredis": "^5.2.3"

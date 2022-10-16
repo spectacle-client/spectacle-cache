@@ -2,6 +2,7 @@ import {Amqp as AmqpBroker, Broker, Redis as RedisBroker} from "@spectacles/brok
 import {readFileSync} from "fs";
 import Redis, {Cluster, Result} from "ioredis";
 import * as Util from "util";
+import {Deduplicator} from "@spectacle-client/dedupe.ts";
 import {CacheNameEvents, GatewayEvents} from "./constants/CacheNameEvents.js";
 import {handlers} from "./handlers/handlers.js";
 import {CacheNames, Config, validateConfig} from "./util/validateConfig.js";
@@ -23,6 +24,7 @@ export class GatewayBroker {
     public gatewayEvents: GatewayEvents[] = [];
     public readonly config: Config;
     public readonly entityConfigMap = new Map<string, EntityConfig>();
+    public deduplicator: Deduplicator | null = null;
 
     public constructor(configPath: string) {
         const jsonFile = readFileSync(configPath, "utf8");
@@ -70,12 +72,15 @@ export class GatewayBroker {
 
     private calculateEvents() {
         const tempGatewayEvents: GatewayEvents[] = [];
+        const tempEntities: CacheNames[] = [];
         this.entityConfigMap.clear();
 
         for (const cacheName of Object.values(CacheNames)) {
             if (this.config.entities[cacheName]) {
                 if (typeof this.config.entities[cacheName].enabled === "boolean" && !this.config.entities[cacheName].enabled)
                     continue;
+
+                tempEntities.push(cacheName);
 
                 let prefix: string = cacheName;
                 if (this.config.entities[cacheName].prefix) {
@@ -115,6 +120,7 @@ export class GatewayBroker {
         }
 
         this.gatewayEvents = Array.from(new Set(tempGatewayEvents));
+        this.deduplicator = new Deduplicator(tempEntities);
 
         console.log(`Cache configuration:\n  ${Util.inspect(this.entityConfigMap, {depth: 1}).replace(/Map\(\d*\)\s{/, "").replace(/}$/, "").trim()}\n`);
     }

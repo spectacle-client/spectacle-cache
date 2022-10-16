@@ -1,12 +1,11 @@
 import {GatewayBroker} from "../../Broker.js";
 import {CacheNames} from "../validateConfig.js";
-import {deduplicate} from "@spectacle-client/dedupe.ts";
 
 export async function set(broker: GatewayBroker, entity: CacheNames, key: string, data: string, options: {cascade?: boolean, update?: boolean} = {}) {
     const config = broker.entityConfigMap.get(entity);
     if (!config) return;
 
-    const deduplicated = JSON.stringify(deduplicate(entity, JSON.parse(data)));
+    const deduplicated = JSON.stringify(broker.deduplicator!.deduplicate(entity, JSON.parse(data)));
 
     if (config.ttl === -1) {
         await broker.cache!.set(key, deduplicated);
